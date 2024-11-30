@@ -1,4 +1,4 @@
-import { getRolUser } from "../models/User.js";
+import { getRolUser } from "../models/UserModel.js";
 
 export const isAdmin = async (req, res, next) => {
   const user = req.user;

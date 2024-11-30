@@ -5,6 +5,14 @@ export const createPayment = (req, res) => {
   //Items es un array [{name: 'product01'}]
   const { total, items } = req.body;
 
+  const mappedItems = items.map((item) => ({
+    name: item.descripcion,
+    sku: `SKU-${item.id_producto}`,
+    price: item.precio_venta.toString(),
+    currency: "USD",
+    quantity: item.cantidad,
+  }));
+
   const create_payment_json = {
     intent: "sale",
     payer: {
@@ -17,7 +25,7 @@ export const createPayment = (req, res) => {
     transactions: [
       {
         item_list: {
-          items: items,
+          items: mappedItems,
         },
         amount: {
           currency: "USD",
@@ -36,16 +44,18 @@ export const createPayment = (req, res) => {
     } else {
       console.log("Create Payment Response");
       console.log(payment);
-      res.status(200).json({ payment });
+
+      const redirectUrl = payment.links.find(link=>link.rel==="approval_url").href
+
+      res.status(200).json({ redirectUrl });
     }
   });
 };
 
-
 //Creamos un execute para almanecenar la venta en la bd
 export const executePayment = (req, res, next) => {
   const { idVenta } = req.params;
-  const { paymentId, PayerID,total } = req.query;
+  const { paymentId, PayerID, total } = req.query;
   const execute_payment_json = {
     payer_id: PayerID,
     transactions: [

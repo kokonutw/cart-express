@@ -11,7 +11,9 @@ export const authenticate = async (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
-
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
     // Verificar el usuario con Supabase
     //Esto nos retorna el .getUser
     //Sobreescribi user con data,  {user,error} -> { data: {user}, error}

@@ -2,10 +2,12 @@ import { pool } from "../config/db.js";
 
 const tabla = "ventas";
 
-export const crearVenta = async (idusuario, estado, total) => {
+export const crearVenta = async (id_usuario, estado, total) => {
+  console.log("Datos que se crea la venta:", id_usuario,estado,total);
+  
   const { rows } = await pool.query(
-    `INSERT INTO ${tabla} (id_usuario,estado,total) VALUES ($1,$2,$3) RETURNING *`,
-    [idusuario, estado, total]
+    `INSERT INTO ${tabla} (id_usuario,estado, total) VALUES ($1,$2,$3) RETURNING *`,
+    [id_usuario, estado, total]
   );
 
   return rows[0];

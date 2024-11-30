@@ -6,6 +6,8 @@ import {
 
 export const createVenta = async (req, res, next) => {
   const { id_usuario, estado, total } = req.body;
+  console.log('Controller venta:', id_usuario,estado,total);
+  
   try {
     const response = await crearVenta(id_usuario, estado, total);
     res.status(201).json(response);
